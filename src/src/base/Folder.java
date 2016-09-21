@@ -28,100 +28,112 @@ public class Folder implements Comparable<Folder>{
 		String[] temp = keywords.split(" ");
 		int n = temp.length;
 		
-		int i =0;
-		
+		int i =0;	
+	
 		List<Note> list = new ArrayList<Note>();
-		
+		List<Note> list2 = new ArrayList<Note>();
 		String name ;
 		String tBefore ;
 		String tAfter ;
 		
-		while(i<n){
-		if(temp[i].contains("or")||temp[i].contains("OR"))
-			{   
+		while(i<n)
+		{if(temp[i].contains("or")||temp[i].contains("OR"))
+		{
+			int before = i-1;
+			int after = i+1;
+			String name2;
+			tBefore = temp[before]; 
 			
-				int before = i-1;
-				int after = i+1;
-				String name2;
-				tBefore = temp[before]; 
-				
-				String tBefore2 = tBefore.toLowerCase();
-				tAfter = temp[after];
-				
-				String tAfter2 = tAfter.toLowerCase();
-				//before
-				for (Note f1:notes){
-					if(f1 instanceof TextNote){
-						 name = f1.getTitle();
-						 name2 = name.toLowerCase();
-						if(name2.contains(tBefore2)||name2.contains(tAfter2))
-							{int redundant = 0;
-							for(Note f2: list)
-							  {if(f2.getTitle()==f1.getTitle())redundant++;}
-							if(redundant==0) list.add(f1);
-							}
-					
-					else{ name = ((TextNote) f1).content;
-					      name2 = name.toLowerCase();
-					      if(name2.contains(tBefore2)||name2.contains(tAfter2))
-					    	  {int redundant = 0;
-								for(Note f2: list)
-								  {if(f2.getTitle()==f1.getTitle())redundant++;}
-								if(redundant==0) list.add(f1);}
-						
-						}
-					}
-					else
-					{ name = f1.getTitle();
-					name2= name.toLowerCase();
+			String tBefore2 = tBefore.toLowerCase();
+			tAfter = temp[after];
+			
+			String tAfter2 = tAfter.toLowerCase();
+			//before
+			for (Note f1:notes){
+				if(f1 instanceof TextNote){
+					 name = f1.getTitle();
+					 name2 = name.toLowerCase();
 					if(name2.contains(tBefore2)||name2.contains(tAfter2))
 						{int redundant = 0;
 						for(Note f2: list)
 						  {if(f2.getTitle()==f1.getTitle())redundant++;}
-						if(redundant==0) list.add(f1);}
-						
+						if(redundant==0) list.add(f1);
+						}
+				
+				else{ name = ((TextNote) f1).content;
+				      name2 = name.toLowerCase();
+				      if(name2.contains(tBefore2)||name2.contains(tAfter2))
+				    	  {int redundant = 0;
+							for(Note f2: list)
+							  {if(f2.getTitle()==f1.getTitle())redundant++;}
+							if(redundant==0) list.add(f1);}
+					
 					}
 				}
-				//After
-				/*for (Note f1:notes){
-					if(f1 instanceof TextNote){
-						 name = f1.getTitle();
-						name.toLowerCase();
-						if(name.contains(tAfter))
-							{list.add(f1);break;}
+				else
+				{ name = f1.getTitle();
+				name2= name.toLowerCase();
+				if(name2.contains(tBefore2)||name2.contains(tAfter2))
+					{int redundant = 0;
+					for(Note f2: list)
+					  {if(f2.getTitle()==f1.getTitle())redundant++;}
+					if(redundant==0) list.add(f1);}
 					
-					else{ name = ((TextNote) f1).content;
-					      name.toLowerCase();
-					      if(name.contains(tAfter))
-					    	  {list.add(f1);break;}
-						
+				}
+			}break;
+		}i++;
+	}   i=i+3;
+	
+		if(temp[i].contains("or")||temp[i].contains("OR"))
+		{
+			int before = i-1;
+			int after = i+1;
+			String name2;
+			tBefore = temp[before]; 
+			
+			String tBefore2 = tBefore.toLowerCase();
+			tAfter = temp[after];
+			
+			String tAfter2 = tAfter.toLowerCase();
+			//before
+			for (Note f1:list){
+				if(f1 instanceof TextNote){
+					 name = f1.getTitle();
+					 name2 = name.toLowerCase();
+					if(name2.contains(tBefore2)||name2.contains(tAfter2))
+						{int redundant = 0;
+						for(Note f2: list2)
+						  {if(f2.getTitle()==f1.getTitle())redundant++;}
+						if(redundant==0) list2.add(f1);
 						}
-					}
-					else
-					{ name = f1.getTitle();
-					name.toLowerCase();
-					if(name.contains(tAfter))
-						list.add(f1);
-						
-					}
-					
-				}*/
 				
-			
-			
-			
-			
-			
+				else{ name = ((TextNote) f1).content;
+				      name2 = name.toLowerCase();
+				      if(name2.contains(tBefore2)||name2.contains(tAfter2))
+				    	  {int redundant = 0;
+							for(Note f2: list2)
+							  {if(f2.getTitle()==f1.getTitle())redundant++;}
+							if(redundant==0) list2.add(f1);}
+					
+					}
+				}
+				else
+				{ name = f1.getTitle();
+				name2= name.toLowerCase();
+				if(name2.contains(tBefore2)||name2.contains(tAfter2))
+					{int redundant = 0;
+					for(Note f2: list2)
+					  {if(f2.getTitle()==f1.getTitle())redundant++;}
+					if(redundant==0) list2.add(f1);}
+					
+				}
 			}
-		i++;
 		}
+	
 		
 		
-		
-		
-		
-		
-		return list;	 
+
+		return list2;	 
 		
 	}
 	@Override
