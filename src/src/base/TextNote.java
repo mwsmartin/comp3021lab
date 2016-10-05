@@ -3,12 +3,17 @@ package base;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.Writer;
 import java.util.Scanner;
 
 public class TextNote extends Note implements Serializable {
@@ -35,7 +40,19 @@ public class TextNote extends Note implements Serializable {
 		private String getTextFromFile(String absolutePath) {
 		String result = "";
 		// TODO
-		File file =null;
+		
+		FileInputStream fis = null;
+		ObjectInputStream in = null;
+		try {
+			fis = new FileInputStream(absolutePath);
+			in = new ObjectInputStream(fis);
+			TextNote nb = (TextNote) in.readObject();
+			in.close();
+			this.content = nb.content;
+			} catch (Exception e) {
+			e.printStackTrace();
+			}
+		/*File file =null;
 		Scanner input = null;
 		
 		try{
@@ -48,12 +65,34 @@ public class TextNote extends Note implements Serializable {
 			
 		}catch(Exception ex){
 			ex.printStackTrace();
-		}
+		}*/
 		return result;
 		
 		}
 		public void exportTextToFile(String pathFolder) {
-			File file = null;
+			
+			//TODO
+			
+			BufferedWriter bw =null;
+			FileWriter writer = null;
+			//File file = new File( pathFolder + File.separator +getTitle().replaceAll(" ","_") + ".txt");
+			try {
+			//TODO
+				//File file = new File( pathFolder + File.separator +getTitle().replaceAll(" ","_") + ".txt");
+				 writer = new FileWriter( pathFolder  +getTitle().replaceAll(" ","_") + "abbbbbb.txt", true);
+				 bw = new BufferedWriter(writer);
+				 //writer.write(content);
+				 //writer.close();
+				 bw.write(content);
+				 
+				bw.close();
+				writer.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			// TODO
+			/*File file = null;
 			PrintWriter pw = null;
 			try{
 				if(pathFolder != "")
@@ -65,7 +104,7 @@ public class TextNote extends Note implements Serializable {
 				pw.close();
 			}catch(Exception ex){
 				ex.printStackTrace();
-			}
+			}*/
 			
 		}
 		/*public void exportTextToFile(String pathFolder) {
