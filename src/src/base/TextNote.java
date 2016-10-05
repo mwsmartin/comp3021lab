@@ -7,9 +7,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Serializable;
+import java.util.Scanner;
 
-public class TextNote extends Note {
+public class TextNote extends Note implements Serializable {
 	public String content;
+	private static final long serialVersionUID = 1L;
 	public TextNote(String title){
 		super(title);
 	}
@@ -31,28 +35,43 @@ public class TextNote extends Note {
 		private String getTextFromFile(String absolutePath) {
 		String result = "";
 		// TODO
-		BufferedReader br;
-        try {
-            br = new BufferedReader(new FileReader(absolutePath));
-            try {
-                String x = br.readLine();
-                while ( x != null ) {
-                    // printing out each line in the file
-                    result += x;
-                } 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println(e);
-            e.printStackTrace();
-        }
+		File file =null;
+		Scanner input = null;
+		
+		try{
+			file = new File(absolutePath);
+			input = new Scanner(file);
+			while(input.hasNextLine()){
+				content = content.concat(input.nextLine());
+			}
+			input.close();
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
 		return result;
+		
 		}
 		public void exportTextToFile(String pathFolder) {
+			File file = null;
+			PrintWriter pw = null;
+			try{
+				if(pathFolder != "")
+					file = new File(pathFolder + File.separator + getTitle().replaceAll(" ","_") + ".txt");
+				else
+					file = new File(getTitle().replaceAll(" ","_") + ".txt");
+				pw = new PrintWriter(file);
+				pw.print(content);
+				pw.close();
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}
+			
+		}
+		/*public void exportTextToFile(String pathFolder) {
 			String text= this.content;
 			BufferedWriter bw;
-			File file = new File( pathFolder + File.separator + this.getTitle() + ".txt");
+			File file = new File( pathFolder + this.getTitle() + ".txt");
 			try {
 				file.createNewFile();
 				 bw = new BufferedWriter(new FileWriter(file));
@@ -64,7 +83,7 @@ public class TextNote extends Note {
 			
 			
 			// TODO
-			}
+			}*/
 	/*public boolean createTextNote(String folderName, String title, String content){
 		TextNote note = new TextNote(title, content);
 		return insertNote(folderName, note);

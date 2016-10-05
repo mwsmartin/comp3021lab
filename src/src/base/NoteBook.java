@@ -36,8 +36,9 @@ public class NoteBook implements  Serializable{
 		try {
 			fis = new FileInputStream(file);
 			in = new ObjectInputStream(fis);
-			NoteBook n = (NoteBook) in.readObject();
+			NoteBook nb = (NoteBook) in.readObject();
 			in.close();
+			this.folders = nb.folders;
 			} catch (Exception e) {
 			e.printStackTrace();
 			}
@@ -47,31 +48,23 @@ public class NoteBook implements  Serializable{
 		//TODO
 		FileOutputStream fos = null;
 		ObjectOutputStream out = null;
-		NoteBook note = new NoteBook();
-		note = this;
+		
 		try {
 		//TODO
 			fos = new FileOutputStream(file);
 			out = new ObjectOutputStream(fos);
-			out.writeObject(note);
+			out.writeObject(this);
 			out.close();		
-			
+			return true;
 		} catch (Exception e) {
 		 return false;
 		}
-		return true;
+	
 		}
 	
 	
 	
-    public int compareTo(Note o){
-    	//String ME =  date.toString();
-    	//String Other = o.date.toString();
-    	//int result = ME.compareTo(Other);
-    	//return result;
-    	return 0;
-    	
-    }
+ 
 	public void sortFolders(){
 		for (Folder f1:folders){
 			f1.sortNotes();
