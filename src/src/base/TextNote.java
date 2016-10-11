@@ -14,6 +14,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.Writer;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class TextNote extends Note implements java.io.Serializable{
@@ -31,6 +32,28 @@ public class TextNote extends Note implements java.io.Serializable{
 	public TextNote(File f) {
 		super(f.getName());
 		this.content = getTextFromFile(f.getAbsolutePath());
+	}
+
+	public Character countLetters(){
+		HashMap<Character,Integer> count = new HashMap<Character,Integer>();
+		String a = this.getTitle() + this.getContent();
+		int b = 0;
+		Character r = ' ';
+		for (int i = 0; i < a.length(); i++) {
+			Character c = a.charAt(i);
+			if (c <= 'Z' && c >= 'A' || c <= 'z' && c >= 'a') {
+				if (!count.containsKey(c)) {
+					count.put(c, 1);
+				} else {
+					count.put(c, count.get(c) + 1);
+					if (count.get(c) > b) {
+						b = count.get(c);
+						r = c;
+					}
+				}
+			}
+		}
+		return r;
 	}
 	
 	private String getTextFromFile(String absolutePath) {

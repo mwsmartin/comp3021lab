@@ -60,114 +60,126 @@ public class Folder implements java.io.Serializable {
 	}
 	
 	public List<Note> searchNotes(String keywords){
-		String key = keywords.toLowerCase();
-		String[] keys = key.split(" ");
-		for(int i = 0;i < keys.length;i++)
-			keys[i] = keys[i].trim();
+		 
+		 List<Note> List_notes = new ArrayList<Note>();
+		 String[] strSplit = keywords.split(" ",0);
 		
-		List<Note> resultnotes = new ArrayList<Note>();
+		 List<String> andArr = new ArrayList<>();
+		 List<String> orArr  = new ArrayList<>();
 		
-		for(Note n:notes){
-			TextNote tn = null;
-			if(n instanceof TextNote){
-				tn = (TextNote)n;
-				int i = 0;
-				while(i < keys.length){
-					//ending case 1
-					if(i == keys.length - 1){
-						if(tn.getTitle().toLowerCase().contains(keys[i])||tn.getContent().toLowerCase().contains(keys[i]))
-							resultnotes.add(tn);
-						break;
-					}
-					//ending case 2:the last 3 element in keys array is 'key1' 'or' 'key2'
-					else if((i == keys.length-3 )&&( keys[i+1].equals("or"))){
-						if((tn.getTitle().toLowerCase().contains(keys[i])||tn.getContent().toLowerCase().contains(keys[i]))||(tn.getTitle().toLowerCase().contains(keys[i+2])||tn.getContent().toLowerCase().contains(keys[i+2])))
-							resultnotes.add(tn);
-						break;
-					}
-					//searching case 1: key[i] 'or' keys[i+2]
-					else if((keys[i+1].equals("or"))){
-						//neither of the two keys matched in the title or content
-						if(!((tn.getTitle().toLowerCase().contains(keys[i])||tn.getContent().toLowerCase().contains(keys[i]))||(tn.getTitle().toLowerCase().contains(keys[i+2])||tn.getContent().toLowerCase().contains(keys[i+2])))){
-							if(keys[i+3] == "or"&& i+3 < keys.length){
-								//keys:A or B or C ,now both A and B are wrong,move to C
-								//if C can be found matched,the whole search case is still satisfied
-								i += 4;
-								continue;
-							}
-							else
-								break;
-						}
-						else{
-							//at least one of the keys matched in the title or content
-							i += 3;
-							//special case A or B or C,now A or B is correct,A or B or C must me correct,and so does A or B or C or D....and so on
-							while(keys[i].equals("or")&&i<keys.length){
-								i += 2;
-							}
-						}
-					}
-					//ordinary searching case
-					else{
-						if(!(tn.getTitle().toLowerCase().contains(keys[i])||tn.getContent().toLowerCase().contains(keys[i]))){
-							break;
-						}
-						i++;
-					}
-				}
-			}
-			//image note
-			else{
-				int i = 0;
-				while(i < keys.length){
-					//ending case 1
-					if(i == keys.length-1){
-						if(n.getTitle().toLowerCase().contains(keys[i])){
-							resultnotes.add(n);
-						}
-						break;
-					}
-					//ending case 2,the same as ending case 2 of text note
-					else if((i == keys.length - 3 )&&( keys[i+1].equals("or"))){
-						if(n.getTitle().toLowerCase().contains(keys[i]) || n.getTitle().toLowerCase().contains(keys[i+2])){
-							resultnotes.add(n);
-						}
-						break;
-					}
-					//searching case 1
-					else if(keys[i+1].equals("or")){
-						if(!(n.getTitle().toLowerCase().contains(keys[i]) || n.getTitle().toLowerCase().contains(keys[i+2])) ){
-							if(keys[i+3] == "or"&& i+3 < keys.length){
-								//keys:A or B or C ,now both A and B are wrong,move to C
-								//if C can be found matched,the whole search case is still satisfied
-								i += 4;
-								continue;
-							}
-							else
-								break;
-						}
-						else{
-							//the same as text note case
-							i += 3;
-							while(keys[i].equals("or")&&i<keys.length){
-								i += 2;
-							}
-						}
-					}
-					//ordinary searching case 
-					else{
-						if(!(n.getTitle().toLowerCase().contains(keys[i]))){
-							break;
-						}
-						else{
-							i++;
-						}
-					}
-				}
-			}
-		}
-		return resultnotes;
+		 for ( int i =0 ; i< strSplit.length ; i++){
+		
+		 if ( strSplit[i] != null && strSplit[i].equalsIgnoreCase("or") ){
+			
+			 orArr.add(strSplit[i+1].toLowerCase());
+			 
+			 if(strSplit[i-1]!=null)
+			  orArr.add(strSplit[i-1].toLowerCase()); 
+			 strSplit[i] = strSplit[i+1] = strSplit[i-1] =null;
+			 
+		 }
+		 //
+		
+		 }
+	 
+		 //
+		 for(int i =0;i<orArr.size();i++){
+			 System.out.println(orArr.get(i));
+		 }
+		 
+		 for ( String s : strSplit ){
+			 if ( s != null )
+				 andArr.add(s.toLowerCase());
+		 }
+	 
+		 for ( Note n: notes ){
+		 
+		 boolean consistOfKeys = true;
+		 boolean consistOfContent = true;
+		 if ( n instanceof ImageNote){
+			
+			 String nTitle = n.getTitle().toLowerCase();
+
+
+			 for ( String s: andArr){
+				 if ( nTitle.contains(s) );
+				 else consistOfKeys = false;
+			 }
+		 if(orArr.size()==3){
+			 for ( int j = 0; j < orArr.size() ; j+=3){
+
+				 if ( nTitle.contains( orArr.get(j) ) || nTitle.contains( orArr.get(j+1) )||nTitle.contains( orArr.get(j+2) ));
+				 else consistOfKeys = false;}
+			 
+		 }else
+			 for ( int j = 0; j < orArr.size() ; j+=2){
+
+				 if ( nTitle.contains( orArr.get(j) ) || nTitle.contains( orArr.get(j+1) ));
+				 else consistOfKeys = false;
+		 
+			 	}
+	 
+			 consistOfContent = false; 
+			 
+		 }else if ( n instanceof TextNote){
+				
+			 String nTitle = n.getTitle().toLowerCase();
+			 String nContent = ((TextNote) n).getContent().toLowerCase();
+
+			 for ( String s: andArr){
+				 if ( nTitle.contains(s) );
+				 else consistOfKeys = false;
+			 }
+			 if(orArr.size()==3){
+				 for ( int j = 0; j < orArr.size() ; j+=3){
+						
+				      if(orArr.get(j)!=null&&orArr.get(j+1)!=null&&orArr.get(j+2)!=null)
+				        if ( nTitle.contains( orArr.get(j) ) || nTitle.contains( orArr.get(j+1))||nTitle.contains( orArr.get(j+2)));
+					 else consistOfKeys = false;
+				     
+			 
+				 	}
+			 }
+			 else
+			 for ( int j = 0; j < orArr.size() ; j+=2){
+				
+			      if(orArr.get(j)!=null&&orArr.get(j+1)!=null)
+			        if ( nTitle.contains( orArr.get(j) ) || nTitle.contains( orArr.get(j+1)));
+				 else consistOfKeys = false;
+			     
+		 
+			 	}
+	 
+			 for ( String s: andArr ){
+
+				 if ( s != null && nContent.contains(s));
+				 else consistOfContent = false;
+			 
+			 }
+			 if(orArr.size()==3){
+				 for ( int j = 0 ; j < orArr.size() ; j+=3){
+                       
+					 if ( nContent.contains( orArr.get(j) ) || nContent.contains( orArr.get(j+1) )||nContent.contains( orArr.get(j+2) ) );
+					 else consistOfContent = false;
+				 	}
+			 }
+			 else
+			 for ( int j = 0 ; j < orArr.size() ; j+=2){
+
+				 if ( nContent.contains( orArr.get(j) ) || nContent.contains( orArr.get(j+1) ) );
+				 else consistOfContent = false;
+			 	}
+	 
+		 }
+		 
+		 if ( consistOfKeys || consistOfContent )
+		 List_notes.add(n);
+		 
+		 }
+		 
+		 return List_notes;
 	}
+
 	
 
 }
