@@ -2,6 +2,7 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -36,8 +37,15 @@ public class JUnitTest {
 	
 	// To do
 	// Design the second test case which reveals the bug in function unknownFunction()
-	
-	
+	@
+	Test
+	public void testCountletters(){
+		TextNote nb = new TextNote("test5","cooomp3021");
+		
+		char n = nb.countLetters();
+		System.out.print(n);
+		assertEquals("The search results is not match" +n,'o',n);
+	}
 
 
 }

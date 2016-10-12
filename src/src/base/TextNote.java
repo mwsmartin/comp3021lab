@@ -46,10 +46,11 @@ public class TextNote extends Note implements java.io.Serializable{
 					count.put(c, 1);
 				} else {
 					count.put(c, count.get(c) + 1);
-					if (count.get(c) > b) {
-						b = count.get(c);
-						r = c;
-					}
+					
+				}
+				if (count.get(c) > b) {
+					b = count.get(c);
+					r = c;
 				}
 			}
 		}
