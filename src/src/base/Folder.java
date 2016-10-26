@@ -29,7 +29,22 @@ public class Folder implements java.io.Serializable {
 	public ArrayList<Note> getNotes(){
 		return notes;
 	}
-	
+	public boolean removeNotes(String title) {
+		// TODO
+		// Given the title of the note, delete it from the folder.
+		// Return true if it is deleted successfully, otherwise return false.
+		for(Note n: notes){
+			if(n.getTitle().equals(title)){
+			  notes.remove(n);
+			  
+			  return true;
+			}
+					
+		}
+		return false;
+		
+		
+		}
 	public String toString(){
 		int nText = 0;
 		int nImage = 0;

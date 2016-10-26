@@ -32,7 +32,10 @@ public class NoteBook implements java.io.Serializable{
 			ex.printStackTrace();
 		}
 	}
-	
+	public void addFolder(String folderName) {
+		Folder t = new Folder(folderName);
+		folders.add(t);
+		}
 	public boolean createTextNote(String foldername,String title){
 		TextNote note = new TextNote(title);
 		return insertNote(foldername,note);
@@ -78,6 +81,16 @@ public class NoteBook implements java.io.Serializable{
 		return folders;
 	}
 	
+	public Folder searchFolder(String s){
+		Folder dummy=null;
+		
+		for(Folder f : folders)
+			if(f.getName().equals(s))
+				dummy=f;
+	    
+		return dummy;
+	}
+	
 	public void sortFolders(){
 		for(Folder f:folders){
 			f.sortNotes();
@@ -91,6 +104,14 @@ public class NoteBook implements java.io.Serializable{
 		}
 		return resultnote;
 	}
+	public boolean isExit(String e){
+		boolean r = false;
+		for(Folder f: folders){
+			if(f.getName().equals(e))
+					r = true;
+		}
+		return r;
+	}
 	
 	public boolean 	save(String file){
 		FileOutputStream fos = null;
@@ -100,11 +121,13 @@ public class NoteBook implements java.io.Serializable{
 			out = new ObjectOutputStream(fos);
 			out.writeObject(this);
 			out.close();
-			return true;
+			//return true;
 			
 		}catch(Exception ex){
+			System.out.println("aaa");
 			return false;
 		}
+		return true;
 		
 	}
 }

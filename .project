@@ -14,4 +14,16 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>delete.png</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Desktop/delete.png</locationURI>
+		</link>
+		<link>
+			<name>save.png</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Desktop/save.png</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
